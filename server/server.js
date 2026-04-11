@@ -39,7 +39,7 @@ const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "server/public")));
 
 // ✅ React catch-all route
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "server/public/index.html"));
 });
 // ✅ PORT
