@@ -8,15 +8,16 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const [input, setInput] = useState(""); // header search
+  const [input, setInput] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [blogs, setBlogs] = useState([]);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  useEffect(() => {
-    axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
-  }, []);
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
 
+  // ✅ SET BASE URL ONCE (FIXED)
+  axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "/api";
+
+  // ----------------- TOKEN SYNC -----------------
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
@@ -30,12 +31,15 @@ export const AppProvider = ({ children }) => {
   // ----------------- LOGIN -----------------
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post("/api/admin/login", { email, password });
+      const { data } = await axios.post("/admin/login", {
+        email,
+        password,
+      });
 
       if (data.success) {
-        setToken(data.token);           // save token
+        setToken(data.token);
         toast.success("Login successful");
-        navigate("/admin");             // go to dashboard
+        navigate("/admin");
       } else {
         toast.error(data.message || "Login failed");
       }
@@ -47,48 +51,50 @@ export const AppProvider = ({ children }) => {
 
   // ----------------- LOGOUT -----------------
   const logout = () => {
-    setToken(null); // removes from state + localStorage
+    setToken(null);
     toast.success("Logged out successfully");
-    navigate("/admin"); // redirect to login page
+    navigate("/admin/login");
   };
 
   // ----------------- FETCH BLOGS -----------------
   const fetchBlogs = async (dummyBlogs = []) => {
     try {
-      const { data } = await axios.get("/api/blog/all");
+      const { data } = await axios.get("/blog/all");
+
       if (data.success) {
         const blogMap = new Map();
-        data.blogs.forEach((b) => blogMap.set(b._id || b.id, b));
-        dummyBlogs.forEach((b) => {
-          if (!blogMap.has(b._id || b.id)) blogMap.set(b._id || b.id, b);
-        });
+        data.blogs.forEach((b) => blogMap.set(b._id, b));
         setBlogs(Array.from(blogMap.values()));
       } else {
         setBlogs(dummyBlogs);
       }
     } catch (error) {
-      toast.error("Error fetching blogs, showing dummy blogs");
+      toast.error("Error fetching blogs");
       setBlogs(dummyBlogs);
     }
   };
 
-  const value = {
-    axios,
-    input,
-    setInput,
-    activeCategory,
-    setActiveCategory,
-    blogs,
-    setBlogs,
-    fetchBlogs,
-    token,
-    setToken,
-    navigate,
-    login,   // ✅ added
-    logout,  // ✅ added
-  };
-
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider
+      value={{
+        axios,
+        input,
+        setInput,
+        activeCategory,
+        setActiveCategory,
+        blogs,
+        setBlogs,
+        fetchBlogs,
+        token,
+        setToken,
+        navigate,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 };
 
 export const useAppContext = () => useContext(AppContext);
