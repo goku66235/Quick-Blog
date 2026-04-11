@@ -1,4 +1,4 @@
-# Logs
+# ---------------- LOGS ----------------
 logs
 *.log
 npm-debug.log*
@@ -7,33 +7,37 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Node modules
+# ---------------- NODE ----------------
 node_modules
+server/node_modules
+client/node_modules
 
-# Environment files (VERY IMPORTANT 🔥)
+# ---------------- ENV (VERY IMPORTANT 🔥) ----------------
 .env
 .env.*
 !.env.example
+server/.env
+client/.env
 
-# Build folders
+# ---------------- BUILD ----------------
 dist
 dist-ssr
 build
-server/public
 
-# Vite / React
+
+# ---------------- VITE ----------------
 .vite
 
-# OS files
+# ---------------- OS ----------------
 .DS_Store
 Thumbs.db
 
-# Editor folders
+# ---------------- EDITOR ----------------
 .vscode/*
 !.vscode/extensions.json
 .idea
 
-# Misc
+# ---------------- MISC ----------------
 *.local
 *.suo
 *.ntvs*
