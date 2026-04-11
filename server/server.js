@@ -33,15 +33,15 @@ app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
 // ✅ SERVE FRONTEND (IMPORTANT)
+// ✅ SERVE FRONTEND (FIXED)
 const __dirname = path.resolve();
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "server/public")));
 
-// ✅ FIXED CATCH-ALL (NO ERROR)
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+// ✅ React catch-all route
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "server/public/index.html"));
 });
-
 // ✅ PORT
 const PORT = process.env.PORT || 3000;
 
