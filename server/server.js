@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import path from "path";
+
 import connectDB from "./configs/db.js";
 
 import adminRouter from "./routes/adminRoutes.js";
@@ -10,31 +11,45 @@ import aiRouter from "./routes/aiRouter.js";
 
 const app = express();
 
+// ================= DATABASE =================
 await connectDB();
 
-app.use(cors({ origin: true, credentials: true }));
+// ================= MIDDLEWARE =================
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// APIs
+// ================= API ROUTES =================
+app.get("/api", (req, res) => {
+  res.send("API WORKING ✅");
+});
+
 app.use("/api/ai", aiRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
-// ================= FRONTEND =================
+// ================= FRONTEND (RENDER FIXED) =================
 const __dirname = path.resolve();
 
-// serve static files
+// serve static frontend build
 app.use(express.static(path.join(__dirname, "server/public")));
 
-// IMPORTANT: safe catch-all (NO "*")
+// IMPORTANT: safe fallback route (NO "*")
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, "server/public/index.html"));
 });
 
-// ================= PORT =================
+// ================= SERVER =================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("✅ Server running on port " + PORT);
+  console.log("🔥 Server running on port " + PORT);
 });
+
+export default app;
