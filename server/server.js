@@ -24,11 +24,11 @@ app.use("/api/admin", adminRouter);
 const __dirname = path.resolve();
 
 // 🔥 IMPORTANT FIX HERE
-app.use(express.static(path.join(__dirname, "public")));
 
-// ================= FRONTEND =================
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+app.use(express.static(path.join(__dirname, "server", "public")));
+
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "server", "public", "index.html"));
 });
 
 // ================= SERVER =================
