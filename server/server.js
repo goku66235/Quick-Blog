@@ -35,14 +35,14 @@ app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
 // ================= FRONTEND (RENDER FIXED) =================
+
 const __dirname = path.resolve();
 
-// serve static frontend build
-app.use(express.static(path.join(__dirname, "server/public")));
+// ✅ CORRECT: serve React build
+app.use(express.static(path.join(process.cwd(), "server", "public")));
 
-// IMPORTANT: safe fallback route (NO "*")
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "server/public/index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "server", "public", "index.html"));
 });
 
 // ================= SERVER =================
