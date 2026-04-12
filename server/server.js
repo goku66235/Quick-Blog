@@ -4,36 +4,50 @@ import cors from "cors";
 import path from "path";
 
 import connectDB from "./configs/db.js";
+
 import adminRouter from "./routes/adminRoutes.js";
 import blogRouter from "./routes/BlogRoute.js";
 import aiRouter from "./routes/aiRouter.js";
 
 const app = express();
+
+// ================= DATABASE =================
 await connectDB();
 
-app.use(cors({ origin: true, credentials: true }));
+// ================= MIDDLEWARE =================
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ================= API =================
+// ================= API ROUTES =================
+app.get("/api", (req, res) => {
+  res.send("API WORKING ✅");
+});
+
 app.use("/api/ai", aiRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
-// ================= STATIC =================
+// ================= FRONTEND (RENDER FIXED) =================
 const __dirname = path.resolve();
 
-// 🔥 IMPORTANT FIX HERE
-
-app.use(express.static(path.join(__dirname, "server", "public")));
+// serve static frontend build
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "server", "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
-
 // ================= SERVER =================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log("🔥 Server running on port " + PORT);
 });
+
+export default app;
