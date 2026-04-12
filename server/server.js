@@ -19,22 +19,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ================= API =================
-app.get("/api", (req, res) => {
-  res.send("API WORKING ✅");
-});
-
 app.use("/api/ai", aiRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
-// ================= FRONTEND FIX =================
+// ================= FRONTEND =================
 
-// ✅ ONLY THIS (IMPORTANT)
-app.use(express.static(path.join(process.cwd(), "public")));
+const __dirname = path.resolve();
 
-// ✅ FALLBACK (NO * ROUTE)
+// serve static frontend
+app.use(express.static(path.join(__dirname, "public")));
+
+// fallback (SAFE — no "*")
 app.use((req, res) => {
-  res.sendFile(path.join(process.cwd(), "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ================= SERVER =================
