@@ -15,21 +15,22 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ================= API =================
+// ================= API FIRST =================
 app.use("/api/ai", aiRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
-// ================= FRONTEND =================
+// ================= STATIC FILES =================
 const __dirname = path.resolve();
 
-// IMPORTANT: your build is inside server/public
 app.use(express.static(path.join(__dirname, "server", "public")));
 
-// fallback for React routes ONLY
-app.get("/.*/", (req, res) => {
+// ================= SAFE FALLBACK =================
+// ONLY for frontend routes (NOT assets, NOT api)
+app.get(/^(?!\/api|\/assets|\/favicon\.svg).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "server", "public", "index.html"));
 });
+
 // ================= SERVER =================
 const PORT = process.env.PORT || 3000;
 
