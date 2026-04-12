@@ -9,11 +9,8 @@ import blogRouter from "./routes/BlogRoute.js";
 import aiRouter from "./routes/aiRouter.js";
 
 const app = express();
-
-// ================= DB =================
 await connectDB();
 
-// ================= MIDDLEWARE =================
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,14 +21,13 @@ app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
 // ================= FRONTEND =================
-
 const __dirname = path.resolve();
 
-// serve static frontend
+// 1. serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// fallback (SAFE — no "*")
-app.use((req, res) => {
+// 2. IMPORTANT: ONLY catch React routes (NOT assets or api)
+app.get(/^\/(?!api|assets|favicon\.svg).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
