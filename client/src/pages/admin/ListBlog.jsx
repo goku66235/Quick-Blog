@@ -8,7 +8,7 @@ const ListBlog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/api/admin/blogs"); // admin route
+      const { data } = await await axios.get("/api/admin/blogs");// admin route
       if (data.success) setBlogs(data.blogs);
       else toast.error("Failed to fetch blogs");
     } catch (error) {
