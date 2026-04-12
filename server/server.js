@@ -27,12 +27,14 @@ app.use("/api/ai", aiRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
-// ================= FRONTEND =================
-app.use(express.static(path.join(process.cwd(), "server", "public")));
+// ================= FRONTEND FIX =================
 
-// SAFE FALLBACK (FIXED)
+// ✅ ONLY THIS (IMPORTANT)
+app.use(express.static(path.join(process.cwd(), "public")));
+
+// ✅ FALLBACK (NO * ROUTE)
 app.use((req, res) => {
-  res.sendFile(path.join(process.cwd(), "server", "public", "index.html"));
+  res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
 // ================= SERVER =================
@@ -41,5 +43,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("🔥 Server running on port " + PORT);
 });
-
-export default app;
