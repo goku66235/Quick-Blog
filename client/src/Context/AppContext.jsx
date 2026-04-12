@@ -5,6 +5,12 @@ import toast from "react-hot-toast";
 
 const AppContext = createContext();
 
+// ================= BASE URL (VERY IMPORTANT) =================
+const API =
+  import.meta.env.VITE_BASE_URL || "http://localhost:3000";
+
+axios.defaults.baseURL = API;
+
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
 
@@ -14,10 +20,7 @@ export const AppProvider = ({ children }) => {
 
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-  // ✅ SET BASE URL ONCE (FIXED)
-  axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "/api";
-
-  // ----------------- TOKEN SYNC -----------------
+  // ================= TOKEN SYNC =================
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
@@ -28,10 +31,10 @@ export const AppProvider = ({ children }) => {
     }
   }, [token]);
 
-  // ----------------- LOGIN -----------------
+  // ================= LOGIN =================
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post("/admin/login", {
+      const { data } = await axios.post("/api/admin/login", {
         email,
         password,
       });
@@ -49,17 +52,17 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // ----------------- LOGOUT -----------------
+  // ================= LOGOUT =================
   const logout = () => {
     setToken(null);
     toast.success("Logged out successfully");
     navigate("/admin/login");
   };
 
-  // ----------------- FETCH BLOGS -----------------
+  // ================= FETCH BLOGS =================
   const fetchBlogs = async (dummyBlogs = []) => {
     try {
-      const { data } = await axios.get("/blog/all");
+      const { data } = await axios.get("/api/blog/all");
 
       if (data.success) {
         const blogMap = new Map();

@@ -4,6 +4,7 @@ import { blog_data, assets } from "../assets/assets";
 import { useAppContext } from "../Context/AppContext";
 import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
+import Loader from "../components/Loader";
 
 const Blog = () => {
   const { id } = useParams();
@@ -166,7 +167,7 @@ const Blog = () => {
     );
 
   if (!blog)
-    return <p className="text-center mt-24 text-gray-600">Loading...</p>;
+    return <Loader/>
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

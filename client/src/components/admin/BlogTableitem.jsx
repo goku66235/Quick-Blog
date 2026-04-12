@@ -60,7 +60,7 @@ const BlogTableitem = ({ blog, fetchBlogs, index }) => {
 
           <button
   onClick={togglePublish}
-  className={`px-2 py-1 rounded text-xs border transition
+  className={`px-2 py-1 rounded text-xs border transition cursor-pointer
     ${
       isPublished
         ? "bg-yellow-100 text-yellow-700 border-yellow-400 hover:bg-yellow-200"

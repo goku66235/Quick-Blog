@@ -4,6 +4,7 @@ import BlogCard from "./BlogCard";
 import { motion } from "framer-motion";
 import { useAppContext } from "../Context/AppContext";
 import toast from "react-hot-toast";
+import Loader from "./Loader";
 
 const BlogList = () => {
   const { input: searchInput, activeCategory, setActiveCategory, axios } = useAppContext();
