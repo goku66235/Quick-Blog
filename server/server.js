@@ -23,14 +23,13 @@ app.use("/api/admin", adminRouter);
 // ================= FRONTEND =================
 const __dirname = path.resolve();
 
-// 1. serve static files
-app.use(express.static(path.join(__dirname, "public")));
+// IMPORTANT: your build is inside server/public
+app.use(express.static(path.join(__dirname, "server", "public")));
 
-// 2. IMPORTANT: ONLY catch React routes (NOT assets or api)
-app.get(/^\/(?!api|assets|favicon\.svg).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+// fallback for React routes ONLY
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "server", "public", "index.html"));
 });
-
 // ================= SERVER =================
 const PORT = process.env.PORT || 3000;
 
