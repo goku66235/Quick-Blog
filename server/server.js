@@ -15,20 +15,20 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ================= API FIRST =================
+// ================= API =================
 app.use("/api/ai", aiRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/admin", adminRouter);
 
-// ================= STATIC FILES =================
+// ================= STATIC =================
 const __dirname = path.resolve();
 
-app.use(express.static(path.join(__dirname, "server", "public")));
+// 🔥 IMPORTANT FIX HERE
+app.use(express.static(path.join(__dirname, "public")));
 
-// ================= SAFE FALLBACK =================
-// ONLY for frontend routes (NOT assets, NOT api)
-app.get(/^(?!\/api|\/assets|\/favicon\.svg).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "server", "public", "index.html"));
+// ================= FRONTEND =================
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ================= SERVER =================
