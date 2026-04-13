@@ -59,19 +59,18 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`py-3 rounded-lg font-semibold ${
-              loading
+            className={`py-3 rounded-lg font-semibold ${loading
                 ? "bg-gray-400"
                 : "bg-yellow-400 hover:bg-yellow-300"
-            }`}
+              }`}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
+        {/* BACK BUTTON */}
         <button
           onClick={() => navigate("/")}
-          className="py-2.5 border text-gray-200 w-full"
+          className="mt-4 py-2.5 border text-gray-200 w-full rounded-lg hover:bg-white/10 cursor-pointer transition"
         >
           ← Back to Home
         </button>
